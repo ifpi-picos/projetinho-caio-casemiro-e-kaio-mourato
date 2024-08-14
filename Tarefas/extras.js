@@ -17,7 +17,8 @@ function AdicionarNovaTarefa (){
         DESCRIÇÃO: prompt('Insira a descrição da tarefa: '),
         VENCIMENTO: new Date(ano, mes - 1, dia),
         PRIORIDADE: prompt (`Defina o grau de PRIORIDADE da tarefa 
-            URGENTE -- POUCO URGENTE -- PODE ESPERAR
+            ALTA - MÉDIA - BAIXA
+            
             `),
         CRIAÇÃO: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
     }
@@ -62,6 +63,36 @@ function RemoverTarefaPendente(){
         console.log('Operação de REMOÇÃO CANCELADA')
     } else {
         console.log('Não conseguimos identificar a sua escolha :(')
+    }
+}
+function PesquisarTarefa() {
+    let tarefaPesquisada = prompt('Digite o TITULO ou a DESCRIÇÃO da tarefa que está procurando: ')
+    let presenteConcluido = false
+    let presentePendente = false
+    
+    
+    for (let i = 0; i < listaConcluido.length; i++) {
+        if (listaConcluido[i].TITULO.includes(tarefaPesquisada) || listaConcluido[i].DESCRIÇÃO.includes(tarefaPesquisada)) {
+            presenteConcluido = true
+            break
+        }
+    }
+
+    if (!presenteConcluido) {
+        for (let k = 0; k < listaPendente.length; k++) {
+            if (listaPendente[k].TITULO.includes(tarefaPesquisada) || listaPendente[k].DESCRIÇÃO.includes(tarefaPesquisada)) {
+                presentePendente = true
+                break
+            }
+        }
+    }
+
+    if (presenteConcluido) {
+        console.log(`A tarefa foi encontrada na lista de concluídas!`)
+    } else if (presentePendente) {
+        console.log(`A tarefa foi encontrada na lista de pendentes!`)
+    } else {
+        console.log(`NÃO HÁ TAREFAS COM ESSAS CARACTERÍSTICAS! Verifique a ortografia e tente novamente.`)
     }
 }
 
@@ -190,9 +221,68 @@ function MarcarComoConcluido (){
         console.log('Tarefa marcada como concluída!')
 }
 
-AdicionarNovaTarefa()
-AdicionarNovaTarefa()
-MarcarComoConcluido()
-MarcarComoConcluido()
-RemoverTarefaConcluida()
-console.table(listaConcluido)
+
+
+function EditarTarefas () {
+    console.table(listaPendente)
+    while (true){
+    let idtarefaeditar = parseInt(prompt('Qual o ID da tarefa que você quer editar? '))
+    if (idtarefaeditar >0 && idtarefaeditar <= listaPendente.length){
+        break
+    } else{
+        console.log('ID DE TAREFA NÃO ENCONTRADO!\nTENTE NOVAMENTE!')
+    }
+    }
+
+    let continuareditando = true
+    while (continuareditando){
+        const propriedade = prompt(`1- Titulo
+2- Descrição
+3- Data de vencimento
+4- Prioridade
+Qual propriedade você deseja editar? `)
+
+        switch(propriedade){
+            case '1':
+                listaPendente[idtarefaeditar].TITULO = prompt('Digite o novo titulo: ')
+                break;
+            case '2':
+                listaPendente[idtarefaeditar].DESCRIÇÃO = prompt('Digite a nova descrição')
+                break;
+            case '3':
+                let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ');
+
+    let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number);
+    if (isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1900) {
+        console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.')
+        return;
+    }
+                listaPendente[idtarefaeditar].VENCIMENTO = new Date(ano, mes - 1, dia)
+                break;
+            
+            case '4':
+                listaPendente[idtarefaeditar].PRIORIDADE = prompt(`Defina o grau de PRIORIDADE da tarefa 
+                    URGENTE -- POUCO URGENTE -- PODE ESPERAR
+                    `)
+                    break;
+            default:
+                console.log('Propriedade inválida!')
+                continue;
+        }
+        while(true){
+        let opcao = parseInt(prompt(`1- SIM
+2- NÃO
+Você deseja continuar editando? `))
+            if (opcao == 2 ){
+                continuareditando = false
+                break
+            } else if(opcao == 1) {
+                break
+            }else if (opcao !== 1 && opcao !== 2){
+                console.log('Opção inválida!')
+            }
+        }
+    }
+}
+
+export {EditarTarefas, MarcarComoConcluido, ResumoDasTarefas, ListarTarefas, PesquisarTarefa, RemoverTarefaConcluida, RemoverTarefaPendente, AdicionarNovaTarefa};
