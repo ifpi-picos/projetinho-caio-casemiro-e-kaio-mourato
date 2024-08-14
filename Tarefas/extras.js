@@ -4,18 +4,29 @@ const listaPendente = []
 
 
 function AdicionarNovaTarefa (){
-    let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ');
+    function datavenc() {
+        let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ');
+    
+        let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number);
+        if (isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1900) {
+            console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.');
+            return;
+        }
+        
+        let dataVencimento = new Date(ano, mes - 1, dia);
 
-    let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number);
-    if (isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1900) {
-        console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.')
-        return;
+        let diaFormatado = String(dataVencimento.getDate()).padStart(2, '0');
+        let mesFormatado = String(dataVencimento.getMonth() + 1).padStart(2, '0');
+        let anoFormatado = dataVencimento.getFullYear();
+    
+        return `${diaFormatado}/${mesFormatado}/${anoFormatado}`;
     }
+    
 
     let novaTarefa = {
         TITULO: prompt('Insira o título da tarefa: '),
         DESCRIÇÃO: prompt('Insira a descrição da tarefa: '),
-        VENCIMENTO: new Date(ano, mes - 1, dia),
+        VENCIMENTO: datavenc(),
         PRIORIDADE: prompt (`Defina o grau de PRIORIDADE da tarefa 
             ALTA - MÉDIA - BAIXA
             
@@ -112,9 +123,9 @@ Qual você deseja ver?`);
     var lista = escolha == '1' ? listaPendente : listaConcluido;
 
     while (true) {
-        var filtro = prompt(`Deseja filtrar as tarefas?
-1- Sim
-2- Não`);
+        var filtro = prompt(`1- Sim
+2- Não
+Deseja filtrar as tarefas?`);
         if (filtro == '1' || filtro == '2') {
             break;
         } else {
