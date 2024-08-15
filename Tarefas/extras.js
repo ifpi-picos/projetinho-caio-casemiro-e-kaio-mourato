@@ -4,6 +4,7 @@ const listaPendente = []
 
 
 function AdicionarNovaTarefa (){
+    console.log('>>>> ADICIONAR NOVA TAREFA')
     function datavenc() {
         let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ');
     
@@ -37,6 +38,7 @@ function AdicionarNovaTarefa (){
 }
 
 function RemoverTarefaConcluida(){
+    console.log('>>>> REMOVER TAREFA CONCLUIDA')
     console.table(listaConcluido)
     let RemoverTarefa = prompt('Digite o título da tarefa que deseja remover: ')
     let indice = listaConcluido.findIndex(f => f.TITULO === RemoverTarefa)
@@ -46,6 +48,8 @@ function RemoverTarefaConcluida(){
         if (indice !== -1){
             let TarefaRemovida = listaConcluido.splice(indice, 1)
             console.log('Tarefa removida:', TarefaRemovida[0])
+            console.log('Lista atualizada:')
+            console.table(listaConcluido)
         } else {
             console.log('Tarefa não encontrada')
         }
@@ -57,6 +61,7 @@ function RemoverTarefaConcluida(){
     
 }
 function RemoverTarefaPendente(){
+    console.log('>>>> REMOVER TAREFA PENDENTE')
     console.table(listaPendente)
     let RemoverTarefa = prompt('Digite o título da tarefa que deseja remover: ')
     let indice = listaPendente.findIndex(f => f.TITULO === RemoverTarefa)
@@ -67,6 +72,8 @@ function RemoverTarefaPendente(){
         if (indice !== -1){
             let TarefaRemovida = listaPendente.splice(indice, 1)
             console.log('Tarefa removida:', TarefaRemovida[0])
+            console.log('Lista atualizada:')
+            console.table(listaPendente)
         } else {
             console.log('Tarefa não encontrada')
         }
@@ -77,6 +84,7 @@ function RemoverTarefaPendente(){
     }
 }
 function PesquisarTarefa() {
+    console.log('>>>> PESQUISAR TAREFA')
     let tarefaPesquisada = prompt('Digite o TITULO ou a DESCRIÇÃO da tarefa que está procurando: ')
     let presenteConcluido = false
     let presentePendente = false
@@ -100,8 +108,10 @@ function PesquisarTarefa() {
 
     if (presenteConcluido) {
         console.log(`A tarefa foi encontrada na lista de concluídas!`)
+        console.table(listaConcluido)
     } else if (presentePendente) {
         console.log(`A tarefa foi encontrada na lista de pendentes!`)
+        console.table(listaPendente)
     } else {
         console.log(`NÃO HÁ TAREFAS COM ESSAS CARACTERÍSTICAS! Verifique a ortografia e tente novamente.`)
     }
@@ -109,6 +119,7 @@ function PesquisarTarefa() {
 
 
 function ListarTarefas() {
+    console.log('>>>> LISTAR TAREFAS')
     while(true) {
         var escolha = prompt(`1- Lista de pendentes
 2- Lista de concluídas
@@ -116,11 +127,11 @@ Qual você deseja ver?`);
         if (escolha == '1' || escolha == '2') {
             break;
         } else {
-            console.log('Escolha inválida! Digite uma opção válida');
+            console.log('Escolha inválida! Digite uma opção válida')
         }
     }
 
-    var lista = escolha == '1' ? listaPendente : listaConcluido;
+    var lista = escolha == '1' ? listaPendente : listaConcluido
 
     while (true) {
         var filtro = prompt(`1- Sim
@@ -188,6 +199,7 @@ Como você quer ordenar a lista?`);
 }
 
 function ResumoDasTarefas (){
+    console.log('>>>> RESUMO DAS TAREFAS')
     let TotalDeTarefas = listaConcluido.length + listaPendente.length
     let TotalDePendentes = listaPendente.length
     let TotalDeConcluidos = listaConcluido.length
@@ -219,6 +231,7 @@ function ResumoDasTarefas (){
 
 
 function MarcarComoConcluido (){
+    console.log('>>>> MARCAR TAREFA COMO CONLUÍDA')
     console.table(listaPendente)
     while (true){
         var id = parseInt(prompt('Digite o id da tarefa que você quer marcar como concluída:'))
@@ -235,6 +248,7 @@ function MarcarComoConcluido (){
 
 
 function EditarTarefas () {
+    console.log('>>>> EDITAR TAREFA')
     console.table(listaPendente)
     while (true){
     let idtarefaeditar = parseInt(prompt('Qual o ID da tarefa que você quer editar? '))
