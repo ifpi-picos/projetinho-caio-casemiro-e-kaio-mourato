@@ -1,7 +1,7 @@
 import * as extras from './extras.js'
 
 while(true){
-    console.log(`||| GERENCIADOR DE TAREFAS |||
+    console.log(`||| GEREN  CIADOR DE TAREFAS |||
         MENU:
         0 - Encerrar
         1 - Adicionar Nova Tarefa

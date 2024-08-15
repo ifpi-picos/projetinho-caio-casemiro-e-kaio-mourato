@@ -4,40 +4,57 @@ const listaPendente = []
 
 
 function AdicionarNovaTarefa (){
+    console.clear()
     console.log('>>>> ADICIONAR NOVA TAREFA')
     function datavenc() {
-        let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ');
+        let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ')
     
-        let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number);
+        let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number)
         if (isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1900) {
-            console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.');
+            console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.')
             return;
         }
         
-        let dataVencimento = new Date(ano, mes - 1, dia);
+        let dataVencimento = new Date(ano, mes - 1, dia)
 
-        let diaFormatado = String(dataVencimento.getDate()).padStart(2, '0');
-        let mesFormatado = String(dataVencimento.getMonth() + 1).padStart(2, '0');
-        let anoFormatado = dataVencimento.getFullYear();
+        let diaFormatado = String(dataVencimento.getDate()).padStart(2, '0')
+        let mesFormatado = String(dataVencimento.getMonth() + 1).padStart(2, '0')
+        let anoFormatado = dataVencimento.getFullYear()
     
-        return `${diaFormatado}/${mesFormatado}/${anoFormatado}`;
-    }
-    
+        return `${diaFormatado}/${mesFormatado}/${anoFormatado}`
+    }  
 
     let novaTarefa = {
-        TITULO: prompt('Insira o título da tarefa: '),
-        DESCRIÇÃO: prompt('Insira a descrição da tarefa: '),
-        VENCIMENTO: datavenc(),
-        PRIORIDADE: prompt (`Defina o grau de PRIORIDADE da tarefa 
-            ALTA - MÉDIA - BAIXA
-            
-            `),
+        TITULO: prompt('Insira o título da tarefa: '),  
+        DESCRIÇÃO: prompt('Insira a descrição da tarefa: '),  
+        VENCIMENTO: datavenc(),  
+        PRIORIDADE: (() => {
+            let prioridadeNumero = prompt('Insira a prioridade da tarefa (1 = Baixa, 2 = Média, 3 = Alta): ');
+            let prioridadeTexto = '';
+    
+            switch(prioridadeNumero) {
+                case '1':
+                    prioridadeTexto = 'BAIXA';
+                    break;
+                case '2':
+                    prioridadeTexto = 'MÉDIA';
+                    break;
+                case '3':
+                    prioridadeTexto = 'ALTA';
+                    break;
+                default:
+                    prioridadeTexto = '-';
+            }
+            return prioridadeTexto;
+        })(),
         CRIAÇÃO: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
     }
-    novaTarefa = listaPendente.push(novaTarefa)
+    listaPendente.push(novaTarefa)
+    console.log('Tarefa adicionada com sucesso!')
+    console.table(listaPendente)
 }
-
 function RemoverTarefaConcluida(){
+    console.clear()
     console.log('>>>> REMOVER TAREFA CONCLUIDA')
     console.table(listaConcluido)
     let RemoverTarefa = prompt('Digite o título da tarefa que deseja remover: ')
@@ -58,9 +75,10 @@ function RemoverTarefaConcluida(){
     } else {
         console.log('Não conseguimos identificar a sua escolha :(')
     }
-    
+    console.clear()
 }
 function RemoverTarefaPendente(){
+    console.clear()
     console.log('>>>> REMOVER TAREFA PENDENTE')
     console.table(listaPendente)
     let RemoverTarefa = prompt('Digite o título da tarefa que deseja remover: ')
@@ -82,8 +100,10 @@ function RemoverTarefaPendente(){
     } else {
         console.log('Não conseguimos identificar a sua escolha :(')
     }
+    console.clear()
 }
 function PesquisarTarefa() {
+    console.clear()
     console.log('>>>> PESQUISAR TAREFA')
     let tarefaPesquisada = prompt('Digite o TITULO ou a DESCRIÇÃO da tarefa que está procurando: ')
     let presenteConcluido = false
@@ -115,78 +135,96 @@ function PesquisarTarefa() {
     } else {
         console.log(`NÃO HÁ TAREFAS COM ESSAS CARACTERÍSTICAS! Verifique a ortografia e tente novamente.`)
     }
+    console.clear()
 }
-
-
 function ListarTarefas() {
-    console.log('>>>> LISTAR TAREFAS')
+    console.clear()
+    let escolha
+    let filtro
+    let filtroPor
+    let prioridade
+    let dataVencimento
+    let criterio
     while(true) {
-        var escolha = prompt(`1- Lista de pendentes
+        console.log('>>>> LISTAR TAREFAS')
+        escolha = prompt(`1- Lista de pendentes
 2- Lista de concluídas
 Qual você deseja ver?`);
         if (escolha == '1' || escolha == '2') {
-            break;
+            break
         } else {
+            console.clear()
             console.log('Escolha inválida! Digite uma opção válida')
         }
     }
 
-    var lista = escolha == '1' ? listaPendente : listaConcluido
+    let lista = escolha === '1' ? listaPendente : listaConcluido
 
     while (true) {
-        var filtro = prompt(`1- Sim
+        console.clear()
+        filtro = prompt(`1- Sim
 2- Não
 Deseja filtrar as tarefas?`);
         if (filtro == '1' || filtro == '2') {
             break;
         } else {
+            console.clear()
             console.log('Escolha inválida! Digite uma opção válida');
         }
     }
 
     if (filtro == '1') {
-        var filtroPor = prompt(`1- Filtrar por prioridade
+        console.clear()
+        filtroPor = prompt(`1- Filtrar por prioridade
 2- Filtrar por data de vencimento
 Escolha o filtro desejado:`);
         
         switch(filtroPor) {
             case '1':
-                var prioridade = prompt('Digite a prioridade desejada (por exemplo, 1 para alta, 2 para média, 3 para baixa):');
+                console.clear()
+                prioridade = prompt('Digite a prioridade desejada (por exemplo, 1 para alta, 2 para média, 3 para baixa):');
                 lista = lista.filter(tarefa => tarefa.PRIORIDADE == prioridade);
                 break;
 
             case '2':
-                var dataVencimento = prompt('Digite a data de vencimento desejada no formato AAAA-MM-DD:');
+                console.clear()
+                dataVencimento = prompt('Digite a data de vencimento desejada no formato AAAA-MM-DD:');
                 lista = lista.filter(tarefa => tarefa.VENCIMENTO == dataVencimento);
                 break;
 
             default:
+                console.clear()
                 console.log('Escolha inválida! Filtrando sem aplicar filtros.');
         }
     }
 
     while (true) {
-        var criterio = prompt(`1- Data de VENCIMENTO
+        console.clear()
+        criterio = prompt(`1- Data de VENCIMENTO
 2- PRIORIDADE
 3- Data de criação
 Como você quer ordenar a lista?`);
         if (criterio == '1' || criterio == '2' || criterio == '3') {
             break;
         } else {
+            console.clear()
             console.log('Escolha inválida! Digite uma opção válida');
         }
     }
 
     switch(criterio) {
         case '1':
+            console.clear()
             lista.sort((a, b) => new Date(a.VENCIMENTO) - new Date(b.VENCIMENTO));
             break;
 
         case '2':
+            console.clear()
             lista.sort((a, b) => a.PRIORIDADE - b.PRIORIDADE);
             break;
 
         case '3':
+            console.clear()
             lista.sort((a, b) => {
                 const dataA = a.CRIAÇÃO.split('/').reverse().join('');
                 const dataB = b.CRIAÇÃO.split('/').reverse().join('');
@@ -194,11 +232,10 @@ Como você quer ordenar a lista?`);
             });
             break;
     }
-
     console.table(lista);
 }
-
 function ResumoDasTarefas (){
+    console.clear()
     console.log('>>>> RESUMO DAS TAREFAS')
     let TotalDeTarefas = listaConcluido.length + listaPendente.length
     let TotalDePendentes = listaPendente.length
@@ -226,15 +263,14 @@ function ResumoDasTarefas (){
     }
     console.log(`Existem ${TotalDeTarefas} registradas no gerenciador\n${TotalDePendentes} são tarefas pendentes\n${TotalDeConcluidos} são tarefas concluídas`)
     TarefaMaisProximaDeVencer();
+    console.clear()
 }
-
-
-
 function MarcarComoConcluido (){
+    console.clear()
     console.log('>>>> MARCAR TAREFA COMO CONLUÍDA')
     console.table(listaPendente)
     while (true){
-        var id = parseInt(prompt('Digite o id da tarefa que você quer marcar como concluída:'))
+        let id = parseInt(prompt('Digite o id da tarefa que você quer marcar como concluída:'))
         if (id >= 0 && id < listaPendente.length){
             break
         } else {console.log('Não tem tarefa com esse id, tente novamente!')}
@@ -243,11 +279,10 @@ function MarcarComoConcluido (){
     let [tarefa] = listaPendente.splice(id, 1)
         listaConcluido.push(tarefa)
         console.log('Tarefa marcada como concluída!')
+    console.clear()
 }
-
-
-
 function EditarTarefas () {
+    console.clear()
     console.log('>>>> EDITAR TAREFA')
     console.table(listaPendente)
     while (true){
@@ -308,6 +343,7 @@ Você deseja continuar editando? `))
             }
         }
     }
+    console.clear()
 }
 
 export {EditarTarefas, MarcarComoConcluido, ResumoDasTarefas, ListarTarefas, PesquisarTarefa, RemoverTarefaConcluida, RemoverTarefaPendente, AdicionarNovaTarefa};
