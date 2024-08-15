@@ -1,0 +1,1 @@
+console.table(JSON.parse(BancoDeDados))
