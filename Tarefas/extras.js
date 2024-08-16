@@ -7,15 +7,19 @@ function AdicionarNovaTarefa (){
     console.clear()
     console.log('>>>> ADICIONAR NOVA TAREFA')
     function datavenc() {
-        let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ')
-    
-        let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number)
-        if (isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1900) {
-            console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.')
-            return;
+        let dataVencimentoStr
+        let dataValida
+        let dataVencimento
+        while (!dataValida){
+            dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ')
+            let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number)
+            if (isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1900 ) {
+                console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.')
+        } else{
+            dataVencimento = new Date (ano, mes-1, dia)
+            dataValida = true
         }
-        
-        let dataVencimento = new Date(ano, mes - 1, dia)
+    }
 
         let diaFormatado = String(dataVencimento.getDate()).padStart(2, '0')
         let mesFormatado = String(dataVencimento.getMonth() + 1).padStart(2, '0')
@@ -29,7 +33,7 @@ function AdicionarNovaTarefa (){
         DESCRIÇÃO: prompt('Insira a descrição da tarefa: '),  
         VENCIMENTO: datavenc(),  
         PRIORIDADE: (() => {
-            let prioridadeNumero = prompt('Insira a prioridade da tarefa (1 = Baixa, 2 = Média, 3 = Alta): ');
+            let prioridadeNumero = prompt('Insira a prioridade da tarefa (1 = BAIXA, 2 = MÉDIA, 3 = ALTA): ');
             let prioridadeTexto = '';
     
             switch(prioridadeNumero) {
@@ -45,7 +49,7 @@ function AdicionarNovaTarefa (){
                 default:
                     prioridadeTexto = '-';
             }
-            return prioridadeTexto;
+            return prioridadeTexto
         })(),
         CRIAÇÃO: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
     }
@@ -269,8 +273,9 @@ function MarcarComoConcluido (){
     console.clear()
     console.log('>>>> MARCAR TAREFA COMO CONLUÍDA')
     console.table(listaPendente)
+    let id
     while (true){
-        let id = parseInt(prompt('Digite o id da tarefa que você quer marcar como concluída:'))
+        id = parseInt(prompt('Digite o id da tarefa que você quer marcar como concluída:'))
         if (id >= 0 && id < listaPendente.length){
             break
         } else {console.log('Não tem tarefa com esse id, tente novamente!')}
@@ -286,8 +291,8 @@ function EditarTarefas () {
     console.log('>>>> EDITAR TAREFA')
     console.table(listaPendente)
     while (true){
-    let idtarefaeditar = parseInt(prompt('Qual o ID da tarefa que você quer editar? '))
-    if (idtarefaeditar >0 && idtarefaeditar <= listaPendente.length){
+    var idtarefaeditar = parseInt(prompt('Qual o ID da tarefa que você quer editar? '))
+    if (idtarefaeditar >= 0 && idtarefaeditar <= listaPendente.length-1){
         break
     } else{
         console.log('ID DE TAREFA NÃO ENCONTRADO!\nTENTE NOVAMENTE!')
@@ -307,7 +312,7 @@ Qual propriedade você deseja editar? `)
                 listaPendente[idtarefaeditar].TITULO = prompt('Digite o novo titulo: ')
                 break;
             case '2':
-                listaPendente[idtarefaeditar].DESCRIÇÃO = prompt('Digite a nova descrição')
+                listaPendente[idtarefaeditar].DESCRIÇÃO = prompt('Digite a nova descrição: ')
                 break;
             case '3':
                 let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ');
@@ -321,15 +326,24 @@ Qual propriedade você deseja editar? `)
                 break;
             
             case '4':
-                listaPendente[idtarefaeditar].PRIORIDADE = prompt(`Defina o grau de PRIORIDADE da tarefa 
-                    URGENTE -- POUCO URGENTE -- PODE ESPERAR
-                    `)
-                    break;
-            default:
-                console.log('Propriedade inválida!')
-                continue;
-        }
-        while(true){
+                let prioridade = parseInt(prompt('Defina o grau de PRIORIDADE da tarefa (1 = Baixa, 2 = Média, 3 = Alta): '));
+
+                if (prioridade === 1) {
+                    listaPendente[idtarefaeditar].PRIORIDADE = 'BAIXA'
+                } else if (prioridade === 2) {
+                    listaPendente[idtarefaeditar].PRIORIDADE = 'MÉDIA'
+                } else if (prioridade === 3) {
+                    listaPendente[idtarefaeditar].PRIORIDADE = 'ALTA'
+                } else {
+                    console.log('Prioridade inválida. Por favor, escolha entre 1, 2 ou 3.')
+                    continue;
+                }
+                break;
+                default:
+                    console.log('Escolha inválida!')
+                    continue;
+    }
+    while(true){
         let opcao = parseInt(prompt(`1- SIM
 2- NÃO
 Você deseja continuar editando? `))
@@ -342,8 +356,8 @@ Você deseja continuar editando? `))
                 console.log('Opção inválida!')
             }
         }
-    }
-    console.clear()
+    
+}console.clear()
 }
 
 export {EditarTarefas, MarcarComoConcluido, ResumoDasTarefas, ListarTarefas, PesquisarTarefa, RemoverTarefaConcluida, RemoverTarefaPendente, AdicionarNovaTarefa};
