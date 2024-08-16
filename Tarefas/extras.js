@@ -47,7 +47,8 @@ function AdicionarNovaTarefa (){
                     prioridadeTexto = 'ALTA';
                     break;
                 default:
-                    prioridadeTexto = '-';
+                    prioridadeTexto = 'Opção inválida. Usando padrão BAIXA'
+                    prioridadeTexto = ''
             }
             return prioridadeTexto
         })(),
@@ -142,108 +143,125 @@ function PesquisarTarefa() {
     console.clear()
 }
 function ListarTarefas() {
-    console.clear()
-    let escolha
-    let filtro
-    let filtroPor
-    let prioridade
-    let dataVencimento
-    let criterio
-    while(true) {
-        console.log('>>>> LISTAR TAREFAS')
-        escolha = prompt(`1- Lista de pendentes
-2- Lista de concluídas
-Qual você deseja ver?`);
-        if (escolha == '1' || escolha == '2') {
-            break
-        } else {
-            console.clear()
-            console.log('Escolha inválida! Digite uma opção válida')
-        }
-    }
-
-    let lista = escolha === '1' ? listaPendente : listaConcluido
+    console.clear();
+    let escolha;
+    let filtro;
+    let filtroPor;
+    let prioridade;
+    let dataVencimento;
+    let criterio;
+    let listaFiltrada;
 
     while (true) {
-        console.clear()
-        filtro = prompt(`1- Sim
-2- Não
-Deseja filtrar as tarefas?`);
-        if (filtro == '1' || filtro == '2') {
+        console.log('>>>> LISTAR TAREFAS');
+        escolha = parseInt(prompt(`1- Lista de pendentes
+2- Lista de concluídas
+Qual você deseja ver?`));
+        if (escolha === 1 || escolha === 2) {
             break;
         } else {
-            console.clear()
+            console.clear();
             console.log('Escolha inválida! Digite uma opção válida');
         }
     }
 
-    if (filtro == '1') {
-        console.clear()
+    let lista = escolha === 1 ? listaPendente : listaConcluido;
+
+    listaFiltrada = [...lista]
+
+    while (true) {
+        console.clear();
+        filtro = parseInt(prompt(`1- Sim
+2- Não
+Deseja filtrar as tarefas?`));
+        if (filtro === 1 || filtro === 2) {
+            break;
+        } else {
+            console.clear();
+            console.log('Escolha inválida! Digite uma opção válida');
+        }
+    }
+
+    if (filtro === 1) {
+        console.clear();
         filtroPor = prompt(`1- Filtrar por prioridade
 2- Filtrar por data de vencimento
 Escolha o filtro desejado:`);
         
-        switch(filtroPor) {
+        switch (filtroPor) {
             case '1':
-                console.clear()
+                console.clear();
                 prioridade = prompt('Digite a prioridade desejada (por exemplo, 1 para alta, 2 para média, 3 para baixa):');
-                lista = lista.filter(tarefa => tarefa.PRIORIDADE == prioridade);
+                listaFiltrada = listaFiltrada.filter(tarefa => {
+                    switch (prioridade) {
+                        case '1': return tarefa.PRIORIDADE === 'ALTA';
+                        case '2': return tarefa.PRIORIDADE === 'MÉDIA';
+                        case '3': return tarefa.PRIORIDADE === 'BAIXA';
+                        default: return false;
+                    }
+                });
                 break;
 
             case '2':
-                console.clear()
+                console.clear();
                 dataVencimento = prompt('Digite a data de vencimento desejada no formato AAAA-MM-DD:');
-                lista = lista.filter(tarefa => tarefa.VENCIMENTO == dataVencimento);
+                listaFiltrada = listaFiltrada.filter(tarefa => tarefa.VENCIMENTO === dataVencimento);
                 break;
 
             default:
-                console.clear()
+                console.clear();
                 console.log('Escolha inválida! Filtrando sem aplicar filtros.');
         }
     }
 
     while (true) {
-        console.clear()
+        console.clear();
         criterio = prompt(`1- Data de VENCIMENTO
 2- PRIORIDADE
 3- Data de criação
 Como você quer ordenar a lista?`);
-        if (criterio == '1' || criterio == '2' || criterio == '3') {
+        if (criterio === '1' || criterio === '2' || criterio === '3') {
             break;
         } else {
-            console.clear()
+            console.clear();
             console.log('Escolha inválida! Digite uma opção válida');
         }
     }
 
-    switch(criterio) {
+    switch (criterio) {
         case '1':
-            console.clear()
-            lista.sort((a, b) => new Date(a.VENCIMENTO) - new Date(b.VENCIMENTO));
+            console.clear();
+            listaFiltrada.sort((a, b) => new Date(a.VENCIMENTO) - new Date(b.VENCIMENTO));
             break;
 
         case '2':
-            console.clear()
-            lista.sort((a, b) => a.PRIORIDADE - b.PRIORIDADE);
+            console.clear();
+            listaFiltrada.sort((a, b) => a.PRIORIDADE - b.PRIORIDADE);
             break;
 
         case '3':
-            console.clear()
-            lista.sort((a, b) => {
+            console.clear();
+            listaFiltrada.sort((a, b) => {
                 const dataA = a.CRIAÇÃO.split('/').reverse().join('');
                 const dataB = b.CRIAÇÃO.split('/').reverse().join('');
                 return dataA.localeCompare(dataB);
             });
             break;
     }
-    console.table(lista);
+
+    console.clear();
+    console.table(listaFiltrada);
 }
-function ResumoDasTarefas (){
-    console.clear()
-    console.log('>>>> RESUMO DAS TAREFAS')
-    let TotalDeTarefas = listaConcluido.length + listaPendente.length
-    let TotalDePendentes = listaPendente.length
-    let TotalDeConcluidos = listaConcluido.length
+
+function ResumoDasTarefas() {
+    console.clear();
+    console.log('>>>> RESUMO DAS TAREFAS');
+
+    // Correção do cálculo dos totais
+    let TotalDeTarefas = listaConcluido.length + listaPendente.length;
+    let TotalDePendentes = listaPendente.length;
+    let TotalDeConcluidos = listaConcluido.length;
+
     function TarefaMaisProximaDeVencer() {
         const agora = new Date();
         
@@ -251,7 +269,8 @@ function ResumoDasTarefas (){
         let menorDiferenca = Infinity;
 
         for (const tarefa of listaPendente) {
-            const diferenca = tarefa.VENCIMENTO - agora;
+            const dataVencimento = new Date(tarefa.VENCIMENTO);
+            const diferenca = dataVencimento - agora;
 
             if (diferenca >= 0 && diferenca < menorDiferenca) {
                 menorDiferenca = diferenca;
@@ -260,15 +279,16 @@ function ResumoDasTarefas (){
         }
         
         if (tarefaMaisProxima) {
-            console.log(`A tarefa mais próxima de vencer é: ${tarefaMaisProxima.TITULO}, com vencimento em ${tarefaMaisProxima.VENCIMENTO.toLocaleDateString('pt-BR')}`);
+            console.log(`A tarefa mais próxima de vencer é: ${tarefaMaisProxima.TITULO}, com vencimento em ${new Date(tarefaMaisProxima.VENCIMENTO).toLocaleDateString('pt-BR')}`);
         } else {
             console.log('Não há tarefas pendentes.');
         }
     }
-    console.log(`Existem ${TotalDeTarefas} registradas no gerenciador\n${TotalDePendentes} são tarefas pendentes\n${TotalDeConcluidos} são tarefas concluídas`)
+
+    console.log(`Existem ${TotalDeTarefas} registradas no gerenciador\n${TotalDePendentes} são tarefas pendentes\n${TotalDeConcluidos} são tarefas concluídas`);
     TarefaMaisProximaDeVencer();
-    console.clear()
 }
+
 function MarcarComoConcluido (){
     console.clear()
     console.log('>>>> MARCAR TAREFA COMO CONLUÍDA')
