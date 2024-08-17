@@ -33,18 +33,18 @@ function AdicionarNovaTarefa (){
         DESCRIÇÃO: prompt('Insira a descrição da tarefa: '),  
         VENCIMENTO: datavenc(),  
         PRIORIDADE: (() => {
-            let prioridadeNumero = prompt('Insira a prioridade da tarefa (1 = BAIXA, 2 = MÉDIA, 3 = ALTA): ');
-            let prioridadeTexto = '';
+            let prioridadeNumero = prompt('Insira a prioridade da tarefa (1 = BAIXA, 2 = MÉDIA, 3 = ALTA): ')
+            let prioridadeTexto = ''
     
             switch(prioridadeNumero) {
                 case '1':
-                    prioridadeTexto = 'BAIXA';
+                    prioridadeTexto = 'BAIXA'
                     break;
                 case '2':
-                    prioridadeTexto = 'MÉDIA';
+                    prioridadeTexto = 'MÉDIA'
                     break;
                 case '3':
-                    prioridadeTexto = 'ALTA';
+                    prioridadeTexto = 'ALTA'
                     break;
                 default:
                     prioridadeTexto = 'Opção inválida. Usando padrão BAIXA'
@@ -142,164 +142,178 @@ function PesquisarTarefa() {
     }
 }
 function ListarTarefas() {
-    console.clear();
-    let escolha;
-    let filtro;
-    let filtroPor;
-    let prioridade;
-    let dataVencimento;
-    let criterio;
-    let listaFiltrada;
+    console.clear()
+    let escolha
+    let filtro
+    let filtroPor
+    let prioridade
+    let dataVencimento
+    let criterio
+    let listaFiltrada
 
     while (true) {
-        console.log('>>>> LISTAR TAREFAS');
+        console.log('>>>> LISTAR TAREFAS')
         escolha = parseInt(prompt(`1- Lista de pendentes
 2- Lista de concluídas
 3- Listar pendentes e concluídas separadamente
-Qual você deseja ver?`));
+Qual você deseja ver?`))
         if (escolha === 1 || escolha === 2 || escolha === 3) {
-            break;
+            break
         } else {
-            console.clear();
-            console.log('Escolha inválida! Digite uma opção válida');
+            console.clear()
+            console.log('Escolha inválida! Digite uma opção válida')
         }
     }
 
     if (escolha === 1 || escolha === 2) {
-        let lista = escolha === 1 ? listaPendente : listaConcluido;
-        listaFiltrada = [...lista];
+        let lista = escolha === 1 ? listaPendente : listaConcluido
+        listaFiltrada = [...lista]
 
         while (true) {
-            console.clear();
+            console.clear()
             filtro = parseInt(prompt(`1- Sim
 2- Não
-Deseja filtrar as tarefas?`));
+Deseja filtrar as tarefas?`))
             if (filtro === 1 || filtro === 2) {
-                break;
+                break
             } else {
-                console.clear();
-                console.log('Escolha inválida! Digite uma opção válida');
+                console.clear()
+                console.log('Escolha inválida! Digite uma opção válida')
             }
         }
 
         if (filtro === 1) {
-            console.clear();
+            console.clear()
             filtroPor = prompt(`1- Filtrar por prioridade
 2- Filtrar por data de vencimento
-Escolha o filtro desejado:`);
-            
+Escolha o filtro desejado:`)
+
             switch (filtroPor) {
                 case '1':
-                    console.clear();
-                    prioridade = prompt('Digite a prioridade desejada (por exemplo, 1 para alta, 2 para média, 3 para baixa):');
+                    console.clear()
+                    prioridade = prompt('Digite a prioridade desejada (por exemplo, 1 para alta, 2 para média, 3 para baixa):')
                     listaFiltrada = listaFiltrada.filter(tarefa => {
                         switch (prioridade) {
-                            case '1': return tarefa.PRIORIDADE === 'ALTA';
-                            case '2': return tarefa.PRIORIDADE === 'MÉDIA';
-                            case '3': return tarefa.PRIORIDADE === 'BAIXA';
-                            default: return false;
+                            case '1': return tarefa.PRIORIDADE === 'ALTA'
+                            case '2': return tarefa.PRIORIDADE === 'MÉDIA'
+                            case '3': return tarefa.PRIORIDADE === 'BAIXA'
+                            default: return false
                         }
-                    });
-                    break;
+                    })
+                    break
 
                 case '2':
-                    console.clear();
-                    dataVencimento = prompt('Digite a data de vencimento desejada no formato AAAA-MM-DD:');
-                    listaFiltrada = listaFiltrada.filter(tarefa => tarefa.VENCIMENTO === dataVencimento);
-                    break;
+                    console.clear()
+                    dataVencimento = prompt('Digite a data de vencimento desejada no formato AAAA-MM-DD:')
+                    listaFiltrada = listaFiltrada.filter(tarefa => tarefa.VENCIMENTO === dataVencimento)
+                    break
 
                 default:
-                    console.clear();
-                    console.log('Escolha inválida! Filtrando sem aplicar filtros.');
+                    console.clear()
+                    console.log('Escolha inválida! Filtrando sem aplicar filtros.')
             }
         }
 
         while (true) {
-            console.clear();
+            console.clear()
             criterio = prompt(`1- Data de VENCIMENTO
 2- PRIORIDADE
 3- Data de criação
-Como você quer ordenar a lista?`);
+Como você quer ordenar a lista?`)
             if (criterio === '1' || criterio === '2' || criterio === '3') {
-                break;
+                break
             } else {
-                console.clear();
-                console.log('Escolha inválida! Digite uma opção válida');
+                console.clear()
+                console.log('Escolha inválida! Digite uma opção válida')
             }
         }
 
         switch (criterio) {
             case '1':
-                console.clear();
-                listaFiltrada.sort((a, b) => new Date(a.VENCIMENTO) - new Date(b.VENCIMENTO));
-                break;
+                console.clear()
+                listaFiltrada.sort((a, b) => new Date(a.VENCIMENTO) - new Date(b.VENCIMENTO))
+                break
 
             case '2':
-                console.clear();
-                listaFiltrada.sort((a, b) => a.PRIORIDADE - b.PRIORIDADE);
-                break;
+                console.clear()
+                listaFiltrada.sort((a, b) => a.PRIORIDADE - b.PRIORIDADE)
+                break
 
             case '3':
-                console.clear();
+                console.clear()
                 listaFiltrada.sort((a, b) => {
-                    const dataA = a.CRIAÇÃO.split('/').reverse().join('');
-                    const dataB = b.CRIAÇÃO.split('/').reverse().join('');
-                    return dataA.localeCompare(dataB);
-                });
-                break;
+                    const dataA = a.CRIAÇÃO.split('/').reverse().join('')
+                    const dataB = b.CRIAÇÃO.split('/').reverse().join('')
+                    return dataA.localeCompare(dataB)
+                })
+                break
         }
 
-        console.clear();
-        console.table(listaFiltrada);
+        console.clear()
 
+        const corTexto = escolha === 1 ? '\x1b[31m' : '\x1b[32m' 
+        const corReset = '\x1b[0m' 
+
+        function formatarTabelaComCor(lista) {
+            return lista.map(tarefa => ({
+                ...tarefa,
+                TITULO: `${corTexto}${tarefa.TITULO}${corReset}`
+            }))
+        }
+
+        console.log('\nLista de Tarefas:')
+        console.table(formatarTabelaComCor(listaFiltrada))
     } else if (escolha === 3) {
-        // Exibir lista de pendentes
-        console.clear();
-        console.log('>>>> LISTA DE TAREFAS PENDENTES');
-        listaFiltrada = [...listaPendente];
-        console.table(listaFiltrada);
+        console.clear()
+        console.log('>>>> LISTA DE TAREFAS PENDENTES')
+        console.log('\x1b[31m')  
+        listaFiltrada = [...listaPendente]
+        console.table(listaFiltrada)
+        console.log('\x1b[0m')  
 
-        // Exibir lista de concluídas
-        console.log('>>>> LISTA DE TAREFAS CONCLUÍDAS');
-        listaFiltrada = [...listaConcluido];
-        console.table(listaFiltrada);
+        console.log('>>>> LISTA DE TAREFAS CONCLUÍDAS')
+        console.log('\x1b[32m')  
+        listaFiltrada = [...listaConcluido]
+        console.table(listaFiltrada)
+        console.log('\x1b[0m')  
     }
 }
-
-
 
 function ResumoDasTarefas() {
     console.clear()
     console.log('>>>> RESUMO DAS TAREFAS')
+
     let TotalDeTarefas = listaConcluido.length + listaPendente.length
     let TotalDePendentes = listaPendente.length
     let TotalDeConcluidos = listaConcluido.length
 
     function TarefaMaisProximaDeVencer() {
-        const agora = new Date();
-        
-        let tarefaMaisProxima = null;
-        let menorDiferenca = Infinity;
+        const agora = new Date()
+        let tarefaMaisProxima = null
+        let menorDiferenca = Infinity
 
         for (const tarefa of listaPendente) {
-            const dataVencimento = new Date(tarefa.VENCIMENTO);
-            const diferenca = dataVencimento - agora;
+            const dataVencimento = new Date(tarefa.VENCIMENTO.split('/').reverse().join('-'))
+            const diferenca = dataVencimento - agora
 
             if (diferenca >= 0 && diferenca < menorDiferenca) {
-                menorDiferenca = diferenca;
-                tarefaMaisProxima = tarefa;
+                menorDiferenca = diferenca
+                tarefaMaisProxima = tarefa
             }
         }
-        
-        if (tarefaMaisProxima) {
-            console.log(`A tarefa mais próxima de vencer é: ${tarefaMaisProxima.TITULO}, com vencimento em ${new Date(tarefaMaisProxima.VENCIMENTO).toLocaleDateString('pt-BR')}`);
-        } else {
-            console.log('Não há tarefas pendentes.');
-        }
+
+        return tarefaMaisProxima
     }
 
-    console.log(`Existem ${TotalDeTarefas} registradas no gerenciador\n${TotalDePendentes} são tarefas pendentes\n${TotalDeConcluidos} são tarefas concluídas`);
-   
+    let tarefaProxima = TarefaMaisProximaDeVencer()
+
+    console.log(`Existem ${TotalDeTarefas} registradas no gerenciador\n${TotalDePendentes} são tarefas pendentes\n${TotalDeConcluidos} são tarefas concluídas`)
+
+    if (tarefaProxima) {
+        console.log(`A tarefa mais próxima de vencer é: ${tarefaProxima.TITULO}, com vencimento em ${new Date(tarefaProxima.VENCIMENTO.split('/').reverse().join('-')).toLocaleDateString('pt-BR')}`)
+    } else {
+        console.log('Não há tarefas pendentes.')
+    }
 }
 
 function MarcarComoConcluido (){
@@ -343,23 +357,23 @@ Qual propriedade você deseja editar? `)
         switch(propriedade){
             case '1':
                 listaPendente[idtarefaeditar].TITULO = prompt('Digite o novo titulo: ')
-                break;
+                break
             case '2':
                 listaPendente[idtarefaeditar].DESCRIÇÃO = prompt('Digite a nova descrição: ')
-                break;
+                break
             case '3':
-                let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ');
+                let dataVencimentoStr = prompt('Insira a data de VENCIMENTO da tarefa no formato dd/mm/aaaa: ')
 
-    let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number);
+    let [dia, mes, ano] = dataVencimentoStr.split('/').map(Number)
     if (isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1900) {
         console.log('Data inválida. Certifique-se de inserir a data no formato dd/mm/aaaa.')
-        return;
+        return
     }
                 listaPendente[idtarefaeditar].VENCIMENTO = new Date(ano, mes - 1, dia)
-                break;
+                break
             
             case '4':
-                let prioridade = parseInt(prompt('Defina o grau de PRIORIDADE da tarefa (1 = Baixa, 2 = Média, 3 = Alta): '));
+                let prioridade = parseInt(prompt('Defina o grau de PRIORIDADE da tarefa (1 = Baixa, 2 = Média, 3 = Alta): '))
 
                 if (prioridade === 1) {
                     listaPendente[idtarefaeditar].PRIORIDADE = 'BAIXA'
@@ -369,12 +383,12 @@ Qual propriedade você deseja editar? `)
                     listaPendente[idtarefaeditar].PRIORIDADE = 'ALTA'
                 } else {
                     console.log('Prioridade inválida. Por favor, escolha entre 1, 2 ou 3.')
-                    continue;
+                    continue
                 }
-                break;
+                break
                 default:
                     console.log('Escolha inválida!')
-                    continue;
+                    continue
     }
     while(true){
         let opcao = parseInt(prompt(`1- SIM

@@ -1,4 +1,4 @@
-import * as extras from './extras.js'
+import * as extras from './function.js'
 
 while(true){
     console.log(`||| GEREN  CIADOR DE TAREFAS |||
